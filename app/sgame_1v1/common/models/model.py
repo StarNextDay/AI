@@ -802,8 +802,8 @@ class Model():
             organ_2_result_list = []
             for index in range(len(organ_3_4)):
                 vec_fc1_input_dim = int(np.prod(organ_3_4[index].get_shape()[1:]))
-                fc1_organ_weight = self._fc_weight_variable(shape=[vec_fc1_input_dim, 1024], name="fc1_organ_weight")
-                fc1_organ_bias = self._bias_variable(shape=[1024], name="fc1_organ_bias")
+                fc1_organ_weight = self._fc_weight_variable(shape=[vec_fc1_input_dim, 32], name="fc1_organ_weight")
+                fc1_organ_bias = self._bias_variable(shape=[32], name="fc1_organ_bias")
                 fc1_organ_result = tf.nn.relu((tf.matmul(organ_3_4[index], fc1_organ_weight) + fc1_organ_bias),
                                               name="fc1_organ_2_result_%d" % index)
 
