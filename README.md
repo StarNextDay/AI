@@ -3,4 +3,5 @@
 
 ·修改了app\sgame_1v1\common\models\model.py
   -适当加深了hero_share、soilder_share、organ_share的网络
+
 ·可能需要进一步修改
