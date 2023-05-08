@@ -358,15 +358,66 @@ class Model():
                 fc1_hero_result = tf.nn.relu((tf.matmul(hero_main[index], fc1_hero_weight) + fc1_hero_bias),
                                              name="fc1_hero_main_result_%d" % index)
 
-                fc2_hero_weight = self._fc_weight_variable(shape=[64, 32], name="fc2_hero_main_weight")
-                fc2_hero_bias = self._bias_variable(shape=[32], name="fc2_hero_main_bias")
+                fc2_hero_weight = self._fc_weight_variable(shape=[64, 256], name="fc2_hero_main_weight")
+                fc2_hero_bias = self._bias_variable(shape=[256], name="fc2_hero_main_bias")
                 fc2_hero_result = tf.nn.relu((tf.matmul(fc1_hero_result, fc2_hero_weight) + fc2_hero_bias),
                                              name="fc2_hero_main_result_%d" % index)
+                
+                fc3_hero_weight = self._fc_weight_variable(shape=[256, 512], name="fc3_hero_main_weight")
+                fc3_hero_bias = self._bias_variable(shape=[512], name="fc3_hero_main_bias")
+                fc3_hero_result = tf.nn.relu((tf.matmul(fc2_hero_result, fc3_hero_weight) + fc3_hero_bias),
+                                             name="fc3_hero_main_result_%d" % index)
+                
+                fc4_hero_weight = self._fc_weight_variable(shape=[512, 1024], name="fc4_hero_main_weight")
+                fc4_hero_bias = self._bias_variable(shape=[1024], name="fc4_hero_main_bias")
+                fc4_hero_result = tf.nn.relu((tf.matmul(fc3_hero_result, fc4_hero_weight) + fc4_hero_bias),
+                                             name="fc4_hero_main_result_%d" % index)
 
-                fc3_hero_weight = self._fc_weight_variable(shape=[32, 16], name="fc3_hero_main_weight")
-                fc3_hero_bias = self._bias_variable(shape=[16], name="fc3_hero_main_bias")
-                fc3_hero_result = tf.add(tf.matmul(fc2_hero_result, fc3_hero_weight), fc3_hero_bias,
-                                         name="fc3_hero_main_result_%d" % index)
+                fc5_hero_weight = self._fc_weight_variable(shape=[1024, 1024], name="fc5_hero_main_weight")
+                fc5_hero_bias = self._bias_variable(shape=[1024], name="fc5_hero_main_bias")
+                fc5_hero_result = tf.nn.relu((tf.matmul(fc4_hero_result, fc5_hero_weight) + fc5_hero_bias),
+                                             name="fc5_hero_main_result_%d" % index)
+                
+                fc6_hero_weight = self._fc_weight_variable(shape=[1024, 1024], name="fc6_hero_main_weight")
+                fc6_hero_bias = self._bias_variable(shape=[1024], name="fc6_hero_main_bias")
+                fc6_hero_result = tf.nn.relu((tf.matmul(fc5_hero_result, fc6_hero_weight) + fc6_hero_bias),
+                                             name="fc6_hero_main_result_%d" % index)
+                
+                fc7_hero_weight = self._fc_weight_variable(shape=[1024, 1024], name="fc7_hero_main_weight")
+                fc7_hero_bias = self._bias_variable(shape=[1024], name="fc7_hero_main_bias")
+                fc7_hero_result = tf.nn.relu((tf.matmul(fc6_hero_result, fc7_hero_weight) + fc7_hero_bias + fc6_hero_result),
+                                             name="fc7_hero_main_result_%d" % index)
+                
+                fc8_hero_weight = self._fc_weight_variable(shape=[1024, 1024], name="fc8_hero_main_weight")
+                fc8_hero_bias = self._bias_variable(shape=[1024], name="fc8_hero_main_bias")
+                # fc8_hero_result = tf.nn.relu((tf.matmul(fc7_hero_result, fc8_hero_weight) + fc8_hero_bias + fc5_hero_result),
+                #                              name="fc8_hero_main_result_%d" % index)
+                fc8_hero_result = tf.nn.relu((tf.matmul(fc7_hero_result, fc8_hero_weight) + fc8_hero_bias),
+                                             name="fc8_hero_main_result_%d" % index)
+                ###这里采用了resnet的思想
+
+                fc9_hero_weight = self._fc_weight_variable(shape=[1024, 512], name="fc9_hero_main_weight")
+                fc9_hero_bias = self._bias_variable(shape=[512], name="fc9_hero_main_bias")
+                fc9_hero_result = tf.nn.relu((tf.matmul(fc8_hero_result, fc9_hero_weight) + fc9_hero_bias),
+                                             name="fc9_hero_main_result_%d" % index)
+                
+                fc10_hero_weight = self._fc_weight_variable(shape=[512, 256], name="fc10_hero_main_weight")
+                fc10_hero_bias = self._bias_variable(shape=[256], name="fc10_hero_main_bias")
+                fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias),
+                                             name="fc10_hero_main_result_%d" % index)
+                # fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias + fc2_hero_result),
+                #                              name="fc10_hero_main_result_%d" % index)
+                ###这里采用了resnet的思想
+
+                fc11_hero_weight = self._fc_weight_variable(shape=[256, 64], name="fc11_hero_main_weight")
+                fc11_hero_bias = self._bias_variable(shape=[64], name="fc11_hero_main_bias")
+                fc11_hero_result = tf.nn.relu((tf.matmul(fc10_hero_result, fc11_hero_weight) + fc11_hero_bias),
+                                             name="fc11_hero_main_result_%d" % index)
+                
+                fc12_hero_weight = self._fc_weight_variable(shape=[64, 16], name="fc12_hero_main_weight")
+                fc12_hero_bias = self._bias_variable(shape=[16], name="fc12_hero_main_bias")
+                fc12_hero_result = tf.add(tf.matmul(fc11_hero_result, fc12_hero_weight) , fc12_hero_bias,
+                                         name="fc12_hero_main_result_%d" % index)
 
             hero_main_concat_result = fc3_hero_result
 
@@ -422,9 +473,12 @@ class Model():
                 
                 fc10_hero_weight = self._fc_weight_variable(shape=[512, 512], name="fc10_hero_weight")
                 fc10_hero_bias = self._bias_variable(shape=[512], name="fc10_hero_bias")
+                # fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias + fc5_hero_result),
+                #                              name="fc10_hero_emy_result_%d" % index)
                 fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias),
                                              name="fc10_hero_emy_result_%d" % index)
-                
+                ###resnet
+
                 fc11_hero_weight = self._fc_weight_variable(shape=[512, 256], name="fc11_hero_weight")
                 fc11_hero_bias = self._bias_variable(shape=[256], name="fc11_hero_bias")
                 fc11_hero_result = tf.nn.relu((tf.matmul(fc10_hero_result, fc11_hero_weight) + fc11_hero_bias),
@@ -439,6 +493,10 @@ class Model():
                 fc13_hero_bias = self._bias_variable(shape=[128], name="fc13_hero_bias")
                 fc13_hero_result = tf.nn.relu((tf.matmul(fc12_hero_result, fc13_hero_weight) + fc13_hero_bias),
                                              name="fc13_hero_emy_result_%d" % index)
+                # fc13_hero_result = tf.nn.relu((tf.matmul(fc12_hero_result, fc13_hero_weight) + fc13_hero_bias + fc2_hero_result),
+                #                              name="fc13_hero_emy_result_%d" % index)
+                ### resnet
+
 
                 fc14_hero_weight = self._fc_weight_variable(shape=[128, 128], name="fc14_hero_emy_weight")
                 fc14_hero_bias = self._bias_variable(shape=[128], name="fc14_hero_emy_bias")
@@ -508,9 +566,12 @@ class Model():
                 
                 fc10_hero_weight = self._fc_weight_variable(shape=[512, 512], name="fc10_hero_weight")
                 fc10_hero_bias = self._bias_variable(shape=[512], name="fc10_hero_bias")
-                fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias),
+                # fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias + fc5_hero_result),
+                #                              name="fc10_hero_frd_result_%d" % index)
+                fc10_hero_result = tf.nn.relu((tf.matmul(fc9_hero_result, fc10_hero_weight) + fc10_hero_bias + fc5_hero_result),
                                              name="fc10_hero_frd_result_%d" % index)
-                
+                ### resnet
+
                 fc11_hero_weight = self._fc_weight_variable(shape=[512, 256], name="fc11_hero_weight")
                 fc11_hero_bias = self._bias_variable(shape=[256], name="fc11_hero_bias")
                 fc11_hero_result = tf.nn.relu((tf.matmul(fc10_hero_result, fc11_hero_weight) + fc11_hero_bias),
@@ -523,8 +584,11 @@ class Model():
                 
                 fc13_hero_weight = self._fc_weight_variable(shape=[256, 128], name="fc13_hero_weight")
                 fc13_hero_bias = self._bias_variable(shape=[128], name="fc13_hero_bias")
+                # fc13_hero_result = tf.nn.relu((tf.matmul(fc12_hero_result, fc13_hero_weight) + fc13_hero_bias + fc2_hero_result),
+                #                              name="fc13_hero_frd_result_%d" % index)
                 fc13_hero_result = tf.nn.relu((tf.matmul(fc12_hero_result, fc13_hero_weight) + fc13_hero_bias),
                                              name="fc13_hero_frd_result_%d" % index)
+                ### resnet
 
                 fc14_hero_weight = self._fc_weight_variable(shape=[128, 128], name="fc14_hero_frd_weight")
                 fc14_hero_bias = self._bias_variable(shape=[128], name="fc14_hero_frd_bias")
@@ -594,9 +658,11 @@ class Model():
                 
                 fc10_soldier_weight = self._fc_weight_variable(shape=[512, 256], name="fc10_soldier_weight")
                 fc10_soldier_bias = self._bias_variable(shape=[256], name="fc10_soldier_bias")
+                # fc10_soldier_result = tf.nn.relu((tf.matmul(fc9_soldier_result, fc10_soldier_weight) + fc10_soldier_bias + fc5_soldier_result),
+                #                                 name="fc10_soldier_1_result_%d" % index)
                 fc10_soldier_result = tf.nn.relu((tf.matmul(fc9_soldier_result, fc10_soldier_weight) + fc10_soldier_bias),
                                                 name="fc10_soldier_1_result_%d" % index)
-                
+
                 fc11_soldier_weight = self._fc_weight_variable(shape=[256, 128], name="fc11_soldier_weight")
                 fc11_soldier_bias = self._bias_variable(shape=[128], name="fc11_soldier_bias")
                 fc11_soldier_result = tf.nn.relu((tf.matmul(fc10_soldier_result, fc11_soldier_weight) + fc11_soldier_bias),
@@ -607,6 +673,10 @@ class Model():
                 fc12_soldier_result = tf.nn.relu((tf.matmul(fc11_soldier_result, fc12_soldier_weight) + fc12_soldier_bias),
                                                 name="fc12_soldier_1_result_%d" % index)
                 
+                # fc13_soldier_weight = self._fc_weight_variable(shape=[64, 64], name="fc13_soldier_weight")
+                # fc13_soldier_bias = self._bias_variable(shape=[64], name="fc13_soldier_bias")
+                # fc13_soldier_result = tf.nn.relu((tf.matmul(fc12_soldier_result, fc13_soldier_weight) + fc13_soldier_bias + fc2_soldier_result),
+                #                                 name="fc13_soldier_1_result_%d" % index)
                 fc13_soldier_weight = self._fc_weight_variable(shape=[64, 64], name="fc13_soldier_weight")
                 fc13_soldier_bias = self._bias_variable(shape=[64], name="fc13_soldier_bias")
                 fc13_soldier_result = tf.nn.relu((tf.matmul(fc12_soldier_result, fc13_soldier_weight) + fc13_soldier_bias),
@@ -680,9 +750,11 @@ class Model():
                 
                 fc10_soldier_weight = self._fc_weight_variable(shape=[512, 256], name="fc10_soldier_weight")
                 fc10_soldier_bias = self._bias_variable(shape=[256], name="fc10_soldier_bias")
+                # fc10_soldier_result = tf.nn.relu((tf.matmul(fc9_soldier_result, fc10_soldier_weight) + fc10_soldier_bias + fc5_soldier_result),
+                #                                 name="fc10_soldier_2_result_%d" % index)
                 fc10_soldier_result = tf.nn.relu((tf.matmul(fc9_soldier_result, fc10_soldier_weight) + fc10_soldier_bias),
                                                 name="fc10_soldier_2_result_%d" % index)
-                
+
                 fc11_soldier_weight = self._fc_weight_variable(shape=[256, 128], name="fc11_soldier_weight")
                 fc11_soldier_bias = self._bias_variable(shape=[128], name="fc11_soldier_bias")
                 fc11_soldier_result = tf.nn.relu((tf.matmul(fc10_soldier_result, fc11_soldier_weight) + fc11_soldier_bias),
@@ -695,6 +767,8 @@ class Model():
                 
                 fc13_soldier_weight = self._fc_weight_variable(shape=[64, 64], name="fc13_soldier_weight")
                 fc13_soldier_bias = self._bias_variable(shape=[64], name="fc13_soldier_bias")
+                # fc13_soldier_result = tf.nn.relu((tf.matmul(fc12_soldier_result, fc13_soldier_weight) + fc13_soldier_bias + fc2_soldier_result),
+                #                                 name="fc13_soldier_2_result_%d" % index)
                 fc13_soldier_result = tf.nn.relu((tf.matmul(fc12_soldier_result, fc13_soldier_weight) + fc13_soldier_bias),
                                                 name="fc13_soldier_2_result_%d" % index)
 
@@ -720,8 +794,8 @@ class Model():
             organ_1_result_list = []
             for index in range(len(organ_1_2)):
                 vec_fc1_input_dim = int(np.prod(organ_1_2[index].get_shape()[1:]))
-                fc1_organ_weight = self._fc_weight_variable(shape=[vec_fc1_input_dim, 1024], name="fc1_organ_weight")
-                fc1_organ_bias = self._bias_variable(shape=[1024], name="fc1_organ_bias")
+                fc1_organ_weight = self._fc_weight_variable(shape=[vec_fc1_input_dim, 32], name="fc1_organ_weight")
+                fc1_organ_bias = self._bias_variable(shape=[32], name="fc1_organ_bias")
                 fc1_organ_result = tf.nn.relu((tf.matmul(organ_1_2[index], fc1_organ_weight) + fc1_organ_bias),
                                               name="fc1_organ_1_result_%d" % index)
 
@@ -767,9 +841,11 @@ class Model():
                 
                 fc10_organ_weight = self._fc_weight_variable(shape=[512, 256], name="fc10_organ_weight")
                 fc10_organ_bias = self._bias_variable(shape=[256], name="fc10_organ_bias")
-                fc10_organ_result = tf.nn.relu((tf.matmul(fc9_organ_result, fc10_organ_weight) + fc10_organ_bias),
+                # fc10_organ_result = tf.nn.relu((tf.matmul(fc9_organ_result, fc10_organ_weight) + fc10_organ_bias + fc5_organ_result),
+                #                                 name="fc10_organ_1_result_%d" % index)
+                fc10_organ_result = tf.nn.relu((tf.matmul(fc9_organ_result, fc10_organ_weight) + fc10_organ_bias ),
                                                 name="fc10_organ_1_result_%d" % index)
-                
+                                                
                 fc11_organ_weight = self._fc_weight_variable(shape=[256, 128], name="fc11_organ_weight")
                 fc11_organ_bias = self._bias_variable(shape=[128], name="fc11_organ_bias")
                 fc11_organ_result = tf.nn.relu((tf.matmul(fc10_organ_result, fc11_organ_weight) + fc11_organ_bias),
@@ -782,6 +858,8 @@ class Model():
                 
                 fc13_organ_weight = self._fc_weight_variable(shape=[64, 64], name="fc13_organ_weight")
                 fc13_organ_bias = self._bias_variable(shape=[64], name="fc13_organ_bias")
+                # fc13_organ_result = tf.nn.relu((tf.matmul(fc12_organ_result, fc13_organ_weight) + fc13_organ_bias + fc2_organ_result),
+                #                                 name="fc13_organ_1_result_%d" % index)
                 fc13_organ_result = tf.nn.relu((tf.matmul(fc12_organ_result, fc13_organ_weight) + fc13_organ_bias),
                                                 name="fc13_organ_1_result_%d" % index)
 
@@ -849,9 +927,11 @@ class Model():
                 
                 fc10_organ_weight = self._fc_weight_variable(shape=[512, 256], name="fc10_organ_weight")
                 fc10_organ_bias = self._bias_variable(shape=[256], name="fc10_organ_bias")
+                # fc10_organ_result = tf.nn.relu((tf.matmul(fc9_organ_result, fc10_organ_weight) + fc10_organ_bias + fc5_organ_result),
+                #                                 name="fc10_organ_2_result_%d" % index)
                 fc10_organ_result = tf.nn.relu((tf.matmul(fc9_organ_result, fc10_organ_weight) + fc10_organ_bias),
                                                 name="fc10_organ_2_result_%d" % index)
-                
+
                 fc11_organ_weight = self._fc_weight_variable(shape=[256, 128], name="fc11_organ_weight")
                 fc11_organ_bias = self._bias_variable(shape=[128], name="fc11_organ_bias")
                 fc11_organ_result = tf.nn.relu((tf.matmul(fc10_organ_result, fc11_organ_weight) + fc11_organ_bias),
@@ -864,6 +944,8 @@ class Model():
                 
                 fc13_organ_weight = self._fc_weight_variable(shape=[64, 64], name="fc13_organ_weight")
                 fc13_organ_bias = self._bias_variable(shape=[64], name="fc13_organ_bias")
+                # fc13_organ_result = tf.nn.relu((tf.matmul(fc12_organ_result, fc13_organ_weight) + fc13_organ_bias + fc2_organ_result),
+                #                                 name="fc13_organ_2_result_%d" % index)
                 fc13_organ_result = tf.nn.relu((tf.matmul(fc12_organ_result, fc13_organ_weight) + fc13_organ_bias),
                                                 name="fc13_organ_2_result_%d" % index)
 
