@@ -419,7 +419,7 @@ class Model():
                 fc12_hero_result = tf.add(tf.matmul(fc11_hero_result, fc12_hero_weight) , fc12_hero_bias,
                                          name="fc12_hero_main_result_%d" % index)
 
-            hero_main_concat_result = fc3_hero_result
+            hero_main_concat_result = fc12_hero_result
 
         with tf.variable_scope("hero_share", reuse=tf.AUTO_REUSE):
             # with tf.variable_scope("hero_emy"):
